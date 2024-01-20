@@ -1,24 +1,29 @@
 # FlipperZero++ (flipperzero_plusplus)
-**A zero-cost C++ wrapper for FlipperZero's C library!**
+**Object-Oriented C++ wrapper around FlipperZero's C library.**
 
-## What is this?
-A modern, object-oriented way to code apps for your FlipperZero device! Without having to deal with raw C pointers and their allocation/deallocation. 
+Write FlipperZero apps in modern object-oriented code, without any overhead!
 
-It is built as a hand-written, 1-to-1 object wrapper to FlipperZero's official `f7_sdk` C library. Hiding the C details on the inside. All without paying any additional cost. These are inlined header-only wrappers that don't add any additional code (unless where it gives additional value). So there really is no reason why you should not use them instead of the C solution.
-
-It has a permissive license. Feel free to use. Feel free to change. But if you make real improvements, please contribute back to this project.
+## Advantages
+* **Objects with methods**: Write `popup.SetIcon({x, y}, icon)` istead of `popup_set_icon(&popup, x, y, icon)` (but you can do both).
+* **Easy memory management**: Constructors and destructors do the allocation and deallocation for you.
+* **Forget raw pointers**: Pass by reference, rather than pointer.
+* **Zero overhead**: Compiles down to the exact same machine code. There is no price to pay.
+* **Just works**: Continue to use `ufbt` and its VSCode integrations, no need for another toolchain. 
+* **C still works too**: The original C header is #included by the C++ version. So you have access to both.
+* **Bug-for-bug**: No added logic, so no new bugs. And all upstream updates are still updates.
+* **Permissinve license**: Go ahead! Use it, change it, improve it! (Please contribute your improvements?)
 
 ## What is it not?
 
-- Complete. It is very early progress. I am going in the order of the popular, existing tutorials of the C version.
-- Well-documented. The original C library is very poorly documented, and this C++ wrapper does not (try) to fix that in any way.
+* Complete. It is very early progress. I am going in the order of the popular, existing tutorials of the C version.
+* Well-documented. The original C library is very poorly documented, and this C++ wrapper does not (try) to fix that in any way.
 
 
 ## How to use?
 
-These files go in addition to the original `f7_sdk` that you would get when you use `ufbt`.
+These files are in addition to the original `f7_sdk` that you would get when you use `ufbt`.
 
-1. Start you project with 
+1. Start you project with (like you normally would)
 ```
 ufbt create APPID=your_unique_app_id
 ```
