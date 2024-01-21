@@ -18,7 +18,7 @@ public:
     using State = uint32_t;
 
     struct Event {
-        enum class Type {
+        enum class Type : std::underlying_type_t< ::SceneManagerEventType> {
             Custom = ::SceneManagerEventTypeCustom,
             Back = ::SceneManagerEventTypeBack,
             Tick = ::SceneManagerEventTypeTick,
@@ -26,7 +26,7 @@ public:
         using Number = uint32_t;
 
         Type type;
-        Number event;
+        Number number;
     };
 
     using OnEnterCallback = void (*)(void* context);
@@ -35,6 +35,14 @@ public:
 
     // Just for the typedefs above... for now.
     Scene() = delete;
+
+    // Just making sure:
+    static_assert(sizeof(Event::type) == sizeof(::SceneManagerEvent::type));
+    static_assert(alignof(Event::type) == alignof(::SceneManagerEvent::type));
+    static_assert(sizeof(Event::number) == sizeof(::SceneManagerEvent::event));
+    static_assert(alignof(Event::number) == alignof(::SceneManagerEvent::event));
+    static_assert(sizeof(Event) == sizeof(::SceneManagerEvent));
+    static_assert(alignof(Event) == alignof(::SceneManagerEvent));
 };
 
 } // namespace gui
