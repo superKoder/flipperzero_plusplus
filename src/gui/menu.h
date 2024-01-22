@@ -13,12 +13,9 @@ namespace gui {
 
 class Menu {
 public:
-private:
     using RawCPtr = ::Menu*;
-    RawCPtr raw_ptr_;
-
-public:
-    using Callback = void (*)(void* context, uint32_t index);
+    using Index = uint32_t;
+    using Callback = void (*)(void* context, Index index);
 
     inline Menu()
         : raw_ptr_(::menu_alloc()){};
@@ -34,7 +31,7 @@ public:
     inline void AddItem(
         const char* label,
         const CIconRawPtr icon,
-        uint32_t index,
+        Index index,
         Callback callback,
         void* context) {
         ::menu_add_item(raw_ptr_, label, icon, index, callback, context);
@@ -44,9 +41,12 @@ public:
         ::menu_reset(raw_ptr_);
     }
 
-    inline void SetSelectedItem(uint32_t index) {
+    inline void SetSelectedItem(Index index) {
         ::menu_set_selected_item(raw_ptr_, index);
     }
+
+private:
+    RawCPtr raw_ptr_;
 };
 
 } // namespace gui

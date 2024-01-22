@@ -20,8 +20,18 @@ public:
         const Scene::OnEnterCallback* on_enter_handlers;
         const Scene::OnEventCallback* on_event_handlers;
         const Scene::OnExitCallback* on_exit_handlers;
-        const size_t scene_num;
+        const size_t length;
     };
+
+    inline SceneManager(const SceneManager::Handlers* app_scene_handlers, void* context)
+        : raw_ptr_(::scene_manager_alloc(
+              reinterpret_cast<const ::SceneManagerHandlers*>(app_scene_handlers),
+              context)) {
+    }
+
+    inline ~SceneManager() {
+        ::scene_manager_free(raw_ptr_);
+    }
 
     inline void SetSceneState(Scene::Id scene_id, Scene::State state) {
         ::scene_manager_set_scene_state(raw_ptr_, scene_id, state);
@@ -33,16 +43,6 @@ public:
 
     inline SceneManager(const ::SceneManagerHandlers* app_scene_handlers, void* context)
         : raw_ptr_(::scene_manager_alloc(app_scene_handlers, context)) {
-    }
-
-    inline SceneManager(const SceneManager::Handlers* app_scene_handlers, void* context)
-        : raw_ptr_(::scene_manager_alloc(
-              reinterpret_cast<const ::SceneManagerHandlers*>(app_scene_handlers),
-              context)) {
-    }
-
-    inline ~SceneManager() {
-        ::scene_manager_free(raw_ptr_);
     }
 
     inline bool HandleCustomEvent(Scene::Event::Number custom_event_number) {
@@ -86,6 +86,26 @@ public:
     inline void Stop() {
         ::scene_manager_stop(raw_ptr_);
     }
+
+    // Just making sure:
+    static_assert(
+        sizeof(Handlers::on_enter_handlers) == sizeof(::SceneManagerHandlers::on_enter_handlers));
+    static_assert(
+        alignof(Handlers::on_enter_handlers) ==
+        alignof(::SceneManagerHandlers::on_enter_handlers));
+    static_assert(
+        sizeof(Handlers::on_event_handlers) == sizeof(::SceneManagerHandlers::on_event_handlers));
+    static_assert(
+        alignof(Handlers::on_event_handlers) ==
+        alignof(::SceneManagerHandlers::on_event_handlers));
+    static_assert(
+        sizeof(Handlers::on_exit_handlers) == sizeof(::SceneManagerHandlers::on_exit_handlers));
+    static_assert(
+        alignof(Handlers::on_exit_handlers) == alignof(::SceneManagerHandlers::on_exit_handlers));
+    static_assert(sizeof(Handlers::length) == sizeof(::SceneManagerHandlers::scene_num));
+    static_assert(alignof(Handlers::length) == alignof(::SceneManagerHandlers::scene_num));
+    static_assert(sizeof(Handlers) == sizeof(::SceneManagerHandlers));
+    static_assert(alignof(Handlers) == alignof(::SceneManagerHandlers));
 };
 
 } // namespace gui

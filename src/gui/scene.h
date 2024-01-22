@@ -6,6 +6,8 @@
 #error Only include this header in a C++17 file (does it have the right file extension?)
 #endif // !__cplusplus
 
+#include <string>
+
 namespace gui {
 
 /**
@@ -44,5 +46,30 @@ public:
     static_assert(sizeof(Event) == sizeof(::SceneManagerEvent));
     static_assert(alignof(Event) == alignof(::SceneManagerEvent));
 };
+
+static std::string ToString(Scene::Event::Number value) {
+    return std::to_string(value);
+}
+
+static std::string ToString(Scene::Event::Type value) {
+    switch(value) {
+    case Scene::Event::Type::Custom:
+        return "Custom";
+    case Scene::Event::Type::Back:
+        return "Back";
+    case Scene::Event::Type::Tick:
+        return "Tick";
+    }
+    FURI_LOG_E(
+        TAG,
+        "Unknown Scene::Event::Type: %d",
+        static_cast<std::underlying_type_t<Scene::Event::Type> >(value));
+    return "UNKNOWN";
+}
+
+// TODO: Make more efficient
+static std::string ToString(Scene::Event const& value) {
+    return std::string("Event{") + ToString(value.type) + ", " + ToString(value.number) + "}";
+}
 
 } // namespace gui
