@@ -8,14 +8,20 @@
 
 #include "view.h"
 #include "icon.h"
+#include "../input/input.h"
+
+#include <functional>
 
 namespace gui {
+
+using namespace input;
+using namespace std::placeholders;
 
 class Menu {
 public:
     using RawCPtr = ::Menu*;
     using Index = uint32_t;
-    using Callback = void (*)(void* context, Index index);
+    using Callback = void (*)(void*, Index);
 
     inline Menu()
         : raw_ptr_(::menu_alloc()){};
@@ -29,12 +35,13 @@ public:
     }
 
     inline void AddItem(
-        const char* label,
-        const CIconRawPtr icon,
         Index index,
+        const char* label,
         Callback callback,
-        void* context) {
-        ::menu_add_item(raw_ptr_, label, icon, index, callback, context);
+        void* context,
+        const CIconRawPtr icon = nullptr) {
+        ::menu_add_item(
+            raw_ptr_, label, icon, index, reinterpret_cast<MenuItemCallback>(callback), context);
     }
 
     inline void Reset() {
