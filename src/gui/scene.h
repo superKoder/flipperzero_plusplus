@@ -47,11 +47,11 @@ public:
     static_assert(alignof(Event) == alignof(::SceneManagerEvent));
 };
 
-static std::string ToString(Scene::Event::Number value) {
+static inline std::string ToString(Scene::Event::Number value) {
     return std::to_string(value);
 }
 
-static std::string ToString(Scene::Event::Type value) {
+static inline std::string ToString(Scene::Event::Type value) {
     switch(value) {
     case Scene::Event::Type::Custom:
         return "Custom";
@@ -61,14 +61,14 @@ static std::string ToString(Scene::Event::Type value) {
         return "Tick";
     }
     FURI_LOG_E(
-        TAG,
+        "fz++",
         "Unknown Scene::Event::Type: %d",
         static_cast<std::underlying_type_t<Scene::Event::Type> >(value));
     return "UNKNOWN";
 }
 
 // TODO: Make more efficient
-static std::string ToString(Scene::Event const& value) {
+static inline std::string ToString(Scene::Event const& value) {
     return std::string("Event{") + ToString(value.type) + ", " + ToString(value.number) + "}";
 }
 
