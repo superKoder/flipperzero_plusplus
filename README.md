@@ -28,12 +28,16 @@ These files are in addition to the original `f7_sdk` that you would get when you
 ufbt create APPID=your_unique_app_id
 ```
 
-2. Make a directory to house these C++ wrappers: 
+2. Add FlipperZero++ as a submodule. For example:
 ```
-mkdir fz++
+mkdir deps
+git submodule add git@github.com:superKoder/flipperzero_plusplus.git deps/flipperzero++
 ```
 
-3. Copy all the files from my `src/` over to your the newly created `fz++/` dir, including all subdirectories.
+3. Make a `src/fz++/` symlink to the `deps/flipperzero++` dependency:
+```
+ln -s deps/flipperzero++ src/fz++
+```
 
 4. Include them as:
 ```
