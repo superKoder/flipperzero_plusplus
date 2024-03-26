@@ -17,6 +17,7 @@ public:
         ShortPress = ::InputTypeShort,
         LongPress = ::InputTypeLong,
         Repeat = ::InputTypeRepeat,
+        
         Count = ::InputTypeMAX,
     };
 
